@@ -1,13 +1,15 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
-from src.handlers.chat_handler import handle_chat
+from src.handlers.chat_handler import chat_agent_handler
 
-router = APIRouter(prefix="/chat", tags=["Chat"])
 
-class ChatRequest(BaseModel):
-    message: str
+router = APIRouter()
 
-@router.post("/")
-def chat_endpoint(req: ChatRequest):
-    response = handle_chat(req.message)
-    return {"response": response}
+@router.post("/chat")
+def chat_agent_route(payload: dict):
+    print("🔥 BACKEND HIT:", payload)  # DEBUG LINE
+    return chat_agent_handler(
+        message=payload["message"],
+        session_id=payload["session_id"]
+    )
+
+    return chat_agent_handler(req.message, req.session_id)
